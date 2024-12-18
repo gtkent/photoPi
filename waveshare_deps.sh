@@ -18,13 +18,8 @@ sudo apt -y install python3-gpiozero
 #Install git
 sudo apt-get -y install git git-lfs
 
-#Download the demo via GitHub (You can skip this step if you have downloaded it.)
-git clone https://github.com/waveshare/e-Paper.git
-#cd e-Paper/RaspberryPi_JetsonNano/
-
-#Download the demo from web (You can skip this step if you have downloaded it.)
-#wget https://files.waveshare.com/upload/7/71/E-Paper_code.zip
-#unzip E-Paper_code.zip -d e-Paper
+#Download the Waveshare repo also at wget https://files.waveshare.com/upload/7/71/E-Paper_code.zip
+git clone -n --depth=1 --filter=tree:0 https://github.com/waveshare/e-Paper.git libs
 #cd e-Paper/RaspberryPi_JetsonNano/
 
 #Run the demo
