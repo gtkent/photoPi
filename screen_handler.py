@@ -3,7 +3,7 @@
 import sys
 import os
 picdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'pics')
-libdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'libs')
+libdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'libs/RaspberryPi_JetsonNano/python/lib')
 if os.path.exists(libdir):
     sys.path.append(libdir)
 
@@ -18,7 +18,7 @@ logging.basicConfig(level=logging.DEBUG)
 class Screen:
     def __init__(self):
         logging.info("New epd7in3f Screen")
-        epd = epd7in3f.EPD()
+        self.epd = epd7in3f.EPD()
         self.initialize()
         #newImage = Image.new('RGB', (epd.width, epd.height), epd.WHITE) 
 
