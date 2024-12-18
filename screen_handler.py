@@ -1,5 +1,3 @@
-#!/usr/bin/python
-# -*- coding:utf-8 -*-
 import sys
 import os
 picdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'pics')
@@ -9,9 +7,8 @@ if os.path.exists(libdir):
 
 import logging
 from waveshare_epd import epd7in3f
-import time
-from PIL import Image,ImageDraw,ImageFont
-import traceback
+from PIL import Image, ImageOps
+
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -20,8 +17,7 @@ class Screen:
         logging.info("New epd7in3f Screen")
         self.epd = epd7in3f.EPD()
         self.initialize()
-        #newImage = Image.new('RGB', (epd.width, epd.height), epd.WHITE) 
-
+        
     def initialize(self):
         logging.info("init and Clear")
         self.epd.init()
@@ -33,15 +29,24 @@ class Screen:
     def clear(self):
         self.epd.Clear() 
 
+    def prepImage(self, img):
+        if img.height > img.width:
+            img = img.rotate(270)
+        if img.width != self.epd.width or img.height != self.epd.height:
+            img = ImageOps.fit(img, (800, 480), Image.LANCZOS)
+
+        return img
+
     def displayImage(self, image):
         self.epd.display(self.epd.getbuffer(image))
 
 def main():
     try:
         # read Current Image file 
-        logging.info("Reading current.gif file")
+        logging.info("Reading current bmp file")
         sc = Screen()
-        newImage = Image.open(os.path.join(picdir, 'current.gif'))
+        newImage = Image.open(os.path.join(picdir, 'current.bmp'))
+        newImage = sc.prepImage(newImage)
         sc.displayImage(newImage)
        
         logging.info("Goto Sleep...")

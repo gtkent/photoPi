@@ -1,20 +1,20 @@
-import argparse, random, sys, getopt, math
-from PIL import Image, ImageDraw, ImageOps
-from datetime import datetime, time
+import random, sys, getopt, math
+from PIL import Image, ImageDraw
+from datetime import datetime
 
 class RandomImage: 
 
-    def __init__(self, numSprites=5000, numColors=256, xDim=800, yDim=480, randFile=__file__, shape="random", percentFull=100):
+    def __init__(self, numSprites=5000, numColors=256, xDim=800, yDim=480, bgColor='black', randFile=__file__, shape="random", percentFull=100):
         self.numSprites = numSprites
         self.numColors = numColors
         self.xDim = xDim
         self.yDim = yDim
+        self.bgColor = bgColor
         self.randFile = randFile
         self.shape = shape
         self.percentFull = percentFull
         self.myRandom = []
-        self.compImage = []
-        self.images = []
+        self.image = Image.new('RGB', (self.xDim, self.yDim), self.bgColor)
         
     class MyRandom:
         
@@ -73,29 +73,14 @@ class RandomImage:
                 self.shapeFuncs[shapeFunc](self, coords)
     #ShapeWithRandom
 
-    def genImage(self, shapeFunc):
-        baseImg = Image.new('RGB', (self.xDim, self.yDim), color=(255,255,255))
-        drawing = ImageDraw.Draw(baseImg)
-       
-        """ 
-        maxShapeWidth = int(self.xDim/self.numSprites)
-        maxShapeHeight = int(self.yDim/self.numSprites)
-        shape = self.ShapeWithRandom(self.myRandom, drawing, maxShapeWidth)        
-        for x in range(0, self.numSprites+10):
-            for y in range(0, self.numSprites+10):
-                leftX = x*maxShapeWidth + random.randint(0, maxShapeWidth)
-                leftY = y*maxShapeHeight + random.randint(0, maxShapeHeight)
-                rightX = leftX + maxShapeWidth - random.randint(1, maxShapeWidth)
-                rightY = leftY + maxShapeHeight - random.randint(1, maxShapeHeight)
-                shape.drawShape( [leftX, leftY, rightX, rightY], shapeFunc )
-        """
-
+    def genImage(self, shapeFunc):      
+        drawing = ImageDraw.Draw(self.image)
         totalArea = self.xDim * self.yDim
         avgFillArea = self.percentFull * totalArea / 100
         avgAreaPerSprite = int(avgFillArea / self.numSprites)
         avg1DPerSprite = int(math.sqrt(avgAreaPerSprite))
 
-        print("New Images with Area: {}, Fill Percent: {}, Fill Area: {}, Avg Sprite Area: {}, and Avg Sprite 1D: {} ".format(totalArea, self.percentFull, avgFillArea, avgAreaPerSprite, avg1DPerSprite ))    
+        print("New Image with Area: {}, Fill Percent: {}, Fill Area: {}, Avg Sprite Area: {}, and Avg Sprite 1D: {} ".format(totalArea, self.percentFull, avgFillArea, avgAreaPerSprite, avg1DPerSprite ))    
 
         shape = self.ShapeWithRandom(self.myRandom, drawing, avg1DPerSprite)
         filledArea=0
@@ -106,51 +91,17 @@ class RandomImage:
             leftY = centerY - random.randint(0, int(avg1DPerSprite))
             rightX = centerX + random.randint(0, int(avg1DPerSprite))
             rightY = centerY + random.randint(0, int(avg1DPerSprite)) 
-            """
-            leftX = centerX - int(avg1DPerSprite)
-            leftY = centerY - int(avg1DPerSprite)
-            rightX = centerX + int(avg1DPerSprite)
-            rightY = centerY + int(avg1DPerSprite)
-            """ 
             shape.drawShape( [leftX, leftY, rightX, rightY], shapeFunc )
             filledArea+= (rightX-leftX)*(rightY-leftY)
 
         print("Allocated Area: {}".format(filledArea/totalArea))    
-        return baseImg
-
-    def createImages(self, shape):
-        with open(self.randFile, "rb") as f:
-            while (seedBytes := f.read(250)):
-                self.myRandom.seedRandom(seedBytes)
-                self.images.append(self.genImage(shape))
-
-    def blend(self):
-        for i in range(1, len(self.images)):
-            self.images[i] = Image.blend(self.images[i-1], self.images[i], 0.5)
-        
-        self.images[0] = Image.blend(self.images[0], self.images[-1], 0.5)
-
-    def blend2(self, blendFile):
-        with Image.open(blendFile) as im:
-            im = im.resize((self.xDim,self.yDim)).convert("L")
-            im = ImageOps.invert(im)
-            self.compImage = im.convert("RGBA")
-            for i in range(0, len(self.images)):
-                self.images[i] = Image.blend(self.images[i], self.compImage, 0.5)
-
-    def composite(self, compFile):
-        with Image.open(compFile) as im:
-            im = im.resize((self.xDim,self.yDim)).convert("L")
-            im = ImageOps.invert(im)
-            self.compImage = im.convert("RGBA")
-            for i in range(0, len(self.images)):
-                self.images[i] = Image.alpha_composite(self.compImage, self.images[i])
 
 #RandomImage    
 
 def main(argv):
     xDim = 800
     yDim = 480
+    bgColor = "black"
     numSprites = 8000
     numColors = 256
     shape = "random"
@@ -160,12 +111,13 @@ def main(argv):
                 -c <numColors> 
                 -x <dimension> 
                 -y <dimension> 
+                -b <bgColor>
                 -f <randSeedFile>
                 -s <shape>
                     arc, chord, ellipse, line, pieSlice, polygon, regPolygon, rectangle, roundedRectangle, random (default)"""
 
     try:
-        opts, args = getopt.getopt(argv,"hn:c:x:y:f:l:s:",["sprites=", "colors=", "xdim=", "ydim=", "file=", "shape="])
+        opts, args = getopt.getopt(argv,"hn:c:x:y:b:f:l:s:",["sprites=", "colors=", "xdim=", "ydim=", "bgColor=", "file=", "shape="])
     except getopt.GetoptError:
         print (helpMsg)
         sys.exit(2)
@@ -181,18 +133,21 @@ def main(argv):
             xDim = int(arg)
         elif opt in ("-y", "--ydim"):
             yDim = int(arg)           
+        elif opt in ("-b", "--bgColor"):
+            bgColor = arg
         elif opt in ("-f", "--file"):
             randFile = arg         
         elif opt in ("-s", "--shape"):
             shape  = arg
 
-    art = RandomImage(numSprites, numColors, xDim, yDim, randFile, shape)
+    art = RandomImage(numSprites, numColors, xDim, yDim, bgColor, randFile, shape)
     with open(art.randFile, "rb") as f:
         seed = f.read(250)
         art.myRandom = art.MyRandom(seed, art.numColors)
-        art.images.append(art.genImage(art.shape))
-        fileName = "pics/Image-"+datetime.now().strftime("%m.%d.%Y-%H.%M.%S")+".gif"
-        art.images[0].save(fileName)
+        art.genImage(art.shape)
+        fileName = "pics/Image-"+datetime.now().strftime("%m.%d.%Y-%H.%M.%S")+".bmp"
+        art.image.save(fileName)
+        art.image.save("pics/current.bmp")
         print("\nCreated: {}\n".format(fileName))
  
 if __name__ == "__main__":
