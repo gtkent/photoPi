@@ -1,0 +1,11 @@
+[Unit]
+Description=PaperPi Service
+After=network.target
+
+[Service]
+ExecStart=/bin/bash /home/user/path/to/paperPi.sh start
+ExecStop=/bin/bash /home/user/path/to/paperPi.sh stop
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

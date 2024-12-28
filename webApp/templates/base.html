@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+	<head>
+		<!-- set the encoding of your site -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="icon" href="{{url_for('static',filename='images/PaperPi-logo.png')}}" />
+		{% block metatags %}
+        {% endblock %}
+
+		<!-- Bootstrap 5 CSS -->
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+		<!-- Custom styles for this template -->
+		<link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+
+	</head>
+	<body class="d-flex flex-column h-100" style="background-color:DarkSeaGreen">
+		
+		<header id="pageHeader" class="position-absolute w-100 ">
+			<!-- Navbar -->
+			{% include "incl_navbar.html" %}
+		</header>
+		
+		<main class="flex-shrink-0">
+		<!-- Start Main content -->
+		{% block contents %}
+		{% endblock %}
+		<!-- End Main content -->
+		</main>	
+		
+		<footer class="footer mt-auto py-3 ">
+		<!-- Footer -->
+		{% include "incl_footer.html" %}
+		</footer>
+
+		<!-- Bootstrap 5 JavaScript -->
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+		<!-- get custom JavaScript -->
+		<script src="{{url_for('static',filename='js/custom.js')}}"></script>
+		
+		{% include "incl_cookie_alert.html" %}
+		{% include "incl_modal.html" %}
+	</body>
+</html>

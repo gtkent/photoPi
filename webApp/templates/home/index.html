@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block metatags %}
+<title>PaperPi</title>
+<meta name="description" content="PaperPi E-Ink manager">
+{% endblock %}
+
+{% block contents %}
+<div class="container">
+    <h1 style="margin-top:37px;">Home page</h1>
+    <p class="lead">Welcome to the webmanager for your PaperPi Display</p>
+    <table class="table table-success table-bordered table-striped" style="width: auto;" >
+      <tbody>
+        <tr>
+          <th scope="row">Picture Source</th>
+          <td>{{config['source']}}</td>
+        </tr>
+        <tr>
+          <th scope="row">Update Picture</th>
+          <td>{{config['changeFreq']}}</td>
+        </tr>
+        <tr>
+          <th scope="row">Refresh Screen</th>
+          <td>{{config['screenRefreshFreq']}}</td>
+        </tr>
+        <tr>
+          <th scope="row">Low Power Mode</th>
+          <td>{{config['lowPower']}}</td>
+        </tr>
+      </tbody>
+      </table>
+    <p>Change the configuration <a href="{{url_for('bl_home.config')}}">here</a></p>
+    <!--<p>Display a new <a href="{{url_for('bl_home.new_random')}}">random </a>picture</p>-->
+    <a class="btn btn-primary" href="{{url_for('bl_home.new_random')}}" role="button">Display New Random Picture</a>
+</div>
+{% endblock %}

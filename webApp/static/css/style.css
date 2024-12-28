@@ -1,0 +1,9 @@
+@charset "UTF-8";
+
+main > .container {
+    padding: 70px 10px 0px 10px;
+}
+/* table, th, td{
+    border:1px solid black;
+    padding: 5px;
+}   */

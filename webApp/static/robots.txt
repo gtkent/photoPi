@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://webApp.variancedigital.com/sitemap.xml

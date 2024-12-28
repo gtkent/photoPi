@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block metatags %}
+<title>Config | PaperPi</title>
+<meta name="description" content="Configure the PaperPI.">
+{% endblock %}
+
+{% block contents %}
+<div class="container">
+    <div>
+        <ol class="breadcrumb small">
+            <li class="breadcrumb-item"><a href="{{url_for('bl_home.index')}}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Config</li>
+        </ol>
+    </div>
+
+    <h1>Configure your PaperPi</h1>
+    <div class="form">
+        <form action="/config" method="POST" >
+            <p>What source of pictures would you like to use?</p>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="source" value="Generate Random Image" checked="checked">Generate a Random Picture<br>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="source" value="Use Pictures in upload directory">Use Uploaded Pictures<br><br>
+            </div>
+            <p>How often would you like the image to change?</p>
+            <div class="form-check">
+                <input class="form-check-input form-check-inline" type="radio" name="changeFreq" value="Daily" checked="checked">Daily
+            </div>
+            <div class="form-check">
+                <input class="form-check-input form-check-inline" type="radio" name="changeFreq" value="Weekly">Weekly
+            </div>
+            <div class="form-check">
+                <input class="form-check-input form-check-inline" type="radio" name="changeFreq" value="other">Other (in hours) <input type="text" id="other_imageFreq" name="other_imageFreq" /><br><br>
+            </div>
+            <p>For the best screen health it should be refreshed to prevent burn-in, but not too often to decrease it's lifetime.</p>
+            <p>How often would you life the screen to refresh itself?</p>
+            <div class="form-check">
+                <input class="form-check-input form-check-inline" type="radio" name="screenRefreshFreq" value="Daily" checked="checked">Daily
+            </div>
+            <div class="form-check">
+                <input class="form-check-input form-check-inline" type="radio" name="screenRefreshFreq" value="Weekly">Weekly
+            </div>
+            <div class="form-check">
+                <input class="form-check-input form-check-inline" type="radio" name="screenRefreshFreq" value="other">Other (in hours) <input type="text" id="other_refreshFreq" name="other_refreshFreq" /><br><br>
+            </div>    
+            <p>Low Power model allows the display to only wake to change the picture (must reboot to be able to reconfigure)</p>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" name="lowPower" value="True" checked>Enabled<br><br>
+            </div>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+
+    
+</div>
+{% endblock %}

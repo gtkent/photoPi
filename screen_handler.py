@@ -2,8 +2,11 @@ import sys
 import os
 picdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'pics')
 libdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'libs/RaspberryPi_JetsonNano/python/lib')
+
 if os.path.exists(libdir):
     sys.path.append(libdir)
+
+picdir = os.getenv("PAPERPIPICS", picdir)
 
 import logging
 from waveshare_epd import epd7in3f
@@ -40,6 +43,15 @@ class Screen:
     def displayImage(self, image):
         self.epd.display(self.epd.getbuffer(image))
 
+def test():
+    testFile = os.path.join(picdir, 'current.bmp')
+    print(f"{testFile} exists {os.path.exists(testFile)}")
+
+def reset():
+    sc = Screen()
+    sc.clear()
+    sc.sleep()
+    
 def main():
     try:
         # read Current Image file 
@@ -61,4 +73,7 @@ def main():
         exit()
 
 if __name__ == "__main__":
-    main()
+    if len(sys.argv) > 1 and sys.argv[1] == 'reset':
+        reset()
+    else:
+        main()
