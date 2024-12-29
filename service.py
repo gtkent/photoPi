@@ -1,6 +1,6 @@
 import json, os, sys, time, random
 import subprocess, signal, threading
-import randomImage, screen_handler
+import randomImage#, screen_handler
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler, EVENT_TYPE_MODIFIED
 from logging_config import logger
@@ -89,7 +89,8 @@ class PaperPiService():
 
     def changePic_on_event(self):
         logger.info("Picture Change Event Triggered")
-        self.displayPic()
+        #self.displayPic()
+        self.create_random_image()
         self.setPicFreq(self.currConfig['changeFreq'])
         
     def refreshScreen_on_event(self):
@@ -98,7 +99,7 @@ class PaperPiService():
         #self.displayPic(same=True)
         self.setScreenRefresh(self.currConfig['screenRefreshFreq'])
 
-    def displayPic(self, same=False):
+    '''def displayPic(self, same=False):
         sc = screen_handler.Screen()
         if same:
             logger.info("Displaying the same image")
@@ -114,16 +115,15 @@ class PaperPiService():
             logger.info("Choosing image to display")
             sc.displayImage(newImage)
             sc.sleep() 
-        
+       ''' 
     def create_random_image(self):
-        art = randomImage.RandomImage()
-        seed = int(datetime.now().timestamp())
-        art.myRandom = art.MyRandom(seed, art.numColors)
-        art.genImage(art.shape)
         fileName = datetime.now().strftime("%m.%d.%Y-%H.%M.%S")+".bmp"
-        art.image.save(os.path.join(PICS_DIR,fileName))
-        art.image.save(os.path.join(PICS_DIR, "current.bmp"))
-        logger.info("\nCreated: {} and copied it as {} \n".format(fileName, "current.bmp"))
+        args = {"fileName": fileName, "directory": PICS_DIR}
+        randomImage.createRandomImage(**args)
+        origFile = os.path.join(PICS_DIR,fileName)
+        copyFile = os.path.join(PICS_DIR,'current.bmp')
+        os.system(f'cp {origFile} {copyFile}')
+        logger.info(f"Created: {fileName} and copied as current.bmp")
 
     def choose_random_image(self):
         logger.info("Trying to choose and image to display...")
@@ -165,8 +165,12 @@ class PaperPiService():
         self.setPicFreq(self.currConfig['changeFreq'])
         self.setScreenRefresh(self.currConfig['screenRefreshFreq'])
                 
-    def gunicorn(self):
+    """def gunicorn(self):
         gunicorn_args = ["/home/user/.local/bin/gunicorn", "--bind=0.0.0.0:8080", "--timeout", "600", "--access-logfile", "/var/log/paperPi.log","webApp:create_app()" ]
+        return subprocess.Popen(gunicorn_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    """
+    def gunicorn(self):
+        gunicorn_args = ["venv/bin/gunicorn", "--bind=0.0.0.0:8080", "--timeout", "600", "--access-logfile", "/var/log/paperPi.log","webApp:create_app()" ]
         return subprocess.Popen(gunicorn_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     
     def wait(self):
@@ -200,7 +204,7 @@ class PaperPiService():
         # Your cleanup logic goes here
         logger.info('Stopping PaperPi service...')
         self.wdConfigThread.stop()
-        screen_handler.reset()
+        #screen_handler.reset()
         
 
 if __name__ == '__main__':

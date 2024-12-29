@@ -12,9 +12,6 @@ psutil==6.1.1
 numpy==2.2.1
 pillow==11.0.0
 spidev==3.6
-gpiozero==2.0.1
 git-lfs==1.6
 python-dotenv==1.0.1
-schedule==1.2.2
-timer-event==0.9.1
 watchdog==6.0.0

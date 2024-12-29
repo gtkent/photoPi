@@ -37,6 +37,9 @@ def create_app():
     
     from . import bl_upload
     app.register_blueprint(bl_upload.bp)
+    
+    from . import bl_log
+    app.register_blueprint(bl_log.bp)
 
     #Add other blueprints if needed
     from . import auth

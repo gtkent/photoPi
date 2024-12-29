@@ -4,6 +4,7 @@ from flask import (
 from .layoutUtils import *
 from .auth import *
 from datetime import datetime
+from logging_config import logger
 import json, os
 import randomImage
 
@@ -33,15 +34,13 @@ def write_config(newConfig):
         json.dump(data, file)
 
 def create_random_image():
-    art = randomImage.RandomImage()
-    seed = int(datetime.now().timestamp())
-    art.myRandom = art.MyRandom(seed, art.numColors)
-    art.genImage(art.shape)
     fileName = datetime.now().strftime("%m.%d.%Y-%H.%M.%S")+".bmp"
-    print("Pic Dir in Random: {}".format(PICS_DIR))
-    art.image.save(os.path.join(PICS_DIR,fileName))
-    art.image.save(os.path.join(PICS_DIR, "current.bmp"))
-    print("\nCreated: {} and copied it as {} \n".format(fileName, "current.bmp"))
+    args = {"fileName": fileName, "directory": PICS_DIR}
+    randomImage.createRandomImage(**args)
+    origFile = os.path.join(PICS_DIR,fileName)
+    copyFile = os.path.join(PICS_DIR,'current.bmp')
+    os.system(f'cp {origFile} {copyFile}')
+    logger.info(f"Created: {fileName} and copied as current.bmp")
 
 bp = Blueprint('bl_home', __name__)
 

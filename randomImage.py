@@ -1,18 +1,18 @@
-import random, sys, getopt, math
+import random, os, sys, getopt, math
 from PIL import Image, ImageDraw
 from datetime import datetime
 
 class RandomImage: 
 
-    def __init__(self, numSprites=5000, numColors=256, xDim=800, yDim=480, bgColor='black', randFile=__file__, shape="random", percentFull=100):
-        self.numSprites = numSprites
-        self.numColors = numColors
-        self.xDim = xDim
-        self.yDim = yDim
-        self.bgColor = bgColor
-        self.randFile = randFile
-        self.shape = shape
-        self.percentFull = percentFull
+    def __init__(self, **kwargs):
+        self.numSprites = kwargs.get('numSprites', 5000)
+        self.numColors = kwargs.get('numColors', 256)
+        self.xDim = kwargs.get('xDim', 800)
+        self.yDim = kwargs.get('yDim', 480)
+        self.bgColor = kwargs.get('bgColor', "black")
+        self.randFile = kwargs.get('randFile', __file__)
+        self.shape = kwargs.get('shape', "random")
+        self.percentFull = kwargs.get('percentFull', 100)
         self.myRandom = []
         self.image = Image.new('RGB', (self.xDim, self.yDim), self.bgColor)
         
@@ -95,8 +95,22 @@ class RandomImage:
             filledArea+= (rightX-leftX)*(rightY-leftY)
 
         print("Allocated Area: {}".format(filledArea/totalArea))    
-
+ 
 #RandomImage    
+
+def createRandomImage(**kwargs):
+        seed = kwargs.get('randSeed', int(datetime.now().timestamp()))
+        fileName = kwargs.get('fileName', datetime.now().strftime("%m.%d.%Y-%H.%M.%S")+".bmp")
+        print(f"----------{fileName}")
+        directory = kwargs.get('directory', 'pics/')
+        print(f"----------{directory}")
+        filePath = os.path.join(directory,fileName)
+        
+        art = RandomImage(**kwargs)
+        art.myRandom = art.MyRandom(seed, art.numColors)
+        art.genImage(art.shape)
+        art.image.save(filePath)
+        #print(f"\nCreated: {fileNamme}\n")
 
 def main(argv):
     xDim = 800

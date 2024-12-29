@@ -1,7 +1,7 @@
 #!/bin/bash
 #Install dependencies
 sudo apt-get update
-sudo apt-get -y install python3-pip git libjpeg-dev zlib1g-dev
+sudo apt-get -y install python3-pip python3-gpiozero git libjpeg-dev zlib1g-dev
 mkdir libs
 
 #Download the Waveshare Libraries 
@@ -13,7 +13,7 @@ git checkout
 cd ..
 #python3 -m venv venv
 #source venv/bin/activate
-pip3 install --break-system-packages -r requirements.txt
+pip install --break-system-packages -r requirements.txt
 sudo touch /var/log/paperPi.log
 sudo chmod a+rw /var/log/paperPi.log
 #sudo cp paperPi.service /etc/systemd/system/

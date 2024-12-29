@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block metatags %}
+<title>PaperPi</title>
+<meta name="description" content="PaperPi E-Ink Service Logs">
+{% endblock %}
+
+{% block contents %}
+<div class="container">
+<form action="/log" method="post">
+  <input name="display_logs" type="submit" value="Display Logs" />
+</form>
+<br>
+
+<textarea rows="30" cols="120" id="log_output"></textarea>
+
+{% if display_logs %}
+<script>
+  console.debug('In script');
+  var target_output = document.getElementById("log_output");
+  var log_update = new EventSource("/log/displayLogs");
+
+   log_update.onmessage = function (e) {
+    if (e.data == "close") {
+      log_update.close();
+    } else {
+      target_output.innerHTML = atob(e.data);
+    }
+  }; 
+</script>
+{% endif %}
+</div>
+{% endblock %}
