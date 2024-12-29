@@ -1,7 +1,7 @@
 #!/bin/bash
 #Install dependencies
 sudo apt-get update
-sudo apt-get -y install python3-pip git
+sudo apt-get -y install python3-pip git libjpeg-dev zlib1g-dev
 mkdir libs
 
 #Download the Waveshare Libraries 
