@@ -1,6 +1,6 @@
 import sys
 import os
-picdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'pics')
+picdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'webApp/static/pics')
 libdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'libs/RaspberryPi_JetsonNano/python/lib')
 
 if os.path.exists(libdir):

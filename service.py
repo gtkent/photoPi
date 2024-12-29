@@ -101,14 +101,17 @@ class PaperPiService():
     def displayPic(self, same=False):
         sc = screen_handler.Screen()
         if same:
-            sc.main()
+            logger.info("Displaying the same image")
+            screen_handler.main()
         elif self.currConfig['source'] == "Generate Random Image":
             self.create_random_image()     
-            sc.main()
+            logger.info("Display a new random image")
+            screen_handler.main()
         else:
             randomFile = self.choose_random_image()
             newImage = Image.open(os.path.join(PICS_DIR, randomFile))
             newImage = sc.prepImage(newImage)
+            logger.info("Choosing image to display")
             sc.displayImage(newImage)
             sc.sleep() 
         
@@ -123,6 +126,7 @@ class PaperPiService():
         logger.info("\nCreated: {} and copied it as {} \n".format(fileName, "current.bmp"))
 
     def choose_random_image(self):
+        logger.info("Trying to choose and image to display...")
         ALLOWED_EXTENSIONS = {'.zip', '.7z', '.png', '.jpg', '.jpeg', '.gif', '.bmp'}
 
         files = [os.path.join(path, filename) for path, dirs, files in os.walk(PICS_DIR) 
@@ -162,7 +166,7 @@ class PaperPiService():
         self.setScreenRefresh(self.currConfig['screenRefreshFreq'])
                 
     def gunicorn(self):
-        gunicorn_args = ["venv/bin/gunicorn", "--bind=0.0.0.0", "--timeout", "600", "--access-logfile", "/var/log/paperPi.log","webApp:create_app()" ]
+        gunicorn_args = ["/home/user/.local/bin/gunicorn", "--bind=0.0.0.0:8080", "--timeout", "600", "--access-logfile", "/var/log/paperPi.log","webApp:create_app()" ]
         return subprocess.Popen(gunicorn_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     
     def wait(self):

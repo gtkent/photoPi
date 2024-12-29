@@ -11,9 +11,9 @@ cd libs
 git sparse-checkout set --no-cone /RaspberryPi_JetsonNano/python/lib/waveshare_epd
 git checkout
 cd ..
-python3 -m venv venv
-source venv/bin/activate
-pip3 install -r requirements.txt
+#python3 -m venv venv
+#source venv/bin/activate
+pip3 install --break-system-packages -r requirements.txt
 sudo touch /var/log/paperPi.log
 sudo chmod a+rw /var/log/paperPi.log
 #sudo cp paperPi.service /etc/systemd/system/
