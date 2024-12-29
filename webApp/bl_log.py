@@ -9,9 +9,17 @@ LOG_FILE = '/var/log/paperPi.log'
 
 bp = Blueprint('bl_log', __name__, url_prefix='/log')
 
+@bp.route('/clearLogs')
+@manage_cookie_policy
+def clear_logs():
+    if os.path.exists(LOG_FILE):
+        f = open(LOG_FILE, 'r+')
+        f.truncate(0)
+    return redirect('/log')
+
 @bp.route('/displayLogs')
 @manage_cookie_policy
-def displayLogs():
+def display_Logs():
     def update():
         yield 'data: Prepare for log\n\n'
         with open(LOG_FILE) as f:

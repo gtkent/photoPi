@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 from logging_config import logger
 
 def loadEnv():
-    print(f"PWD is {os.getcwd()}")
+    os.system("unset PAPERPIROOT PAPERPIAPP PAPERPICONFIG PAPERPIPICS")
     load_dotenv()
     sys.path.append('..')
     

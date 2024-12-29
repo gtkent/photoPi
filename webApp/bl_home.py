@@ -6,9 +6,9 @@ from .auth import *
 from datetime import datetime
 from logging_config import logger
 import json, os
-import randomImage
+import randomImage, screen_handler
 
-CONFIG_FILE = 'webApp/config/config.json'
+CONFIG_FILE = os.path.join(os.getcwd(),'webApp/config/config.json')
 CONFIG_FILE = os.getenv("PAPERPICONFIG", CONFIG_FILE)
 
 PICS_DIR = os.path.join(os.getcwd(), 'webApp/static/pics')
@@ -67,7 +67,14 @@ def config():
 def new_random():
     create_random_image()
     print("Flashing")
-    flash("Msg1")
+    flash("newImageMsg")
+    return redirect('/')
+
+@bp.route('/clear')
+@manage_cookie_policy
+def clear_screen():
+    screen_handler.reset()
+    flash("cleanScreenMsg")
     return redirect('/')
 
 @bp.route('/privacy-notice',methods=('GET', 'POST'))

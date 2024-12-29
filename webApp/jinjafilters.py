@@ -18,7 +18,8 @@ def displayError(errNum):
 
 
 msgDict = { 
-    "Msg1": "<p>A new image was created!!</p>",
+    "newImageMsg": "<p>A new image was created!!</p>",
+    "cleanScreenMsg": "<p>Clearing the Screen!!</p>",
     "wrongImage" : "<p>Allowed file types are -> png, jpg, jpeg, gif, bmp, zip, and 7z</p>"
 }
 
