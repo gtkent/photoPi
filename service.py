@@ -92,7 +92,10 @@ class PaperPiService():
         self.displayPic()
         self.create_random_image()
         self.setPicFreq(self.currConfig['changeFreq'])
-        
+
+    def resetScreen():
+        screen_handler.reset()
+
     def refreshScreen_on_event(self):
         logger.info("Screen Refresh Event Triggered")
         #Change also refreshes and have to restore picture anyway so...
@@ -166,8 +169,8 @@ class PaperPiService():
         self.setScreenRefresh(self.currConfig['screenRefreshFreq'])
                 
     def gunicorn(self):
-        gunicorn_args = ["/home/user/.local/bin/gunicorn", "--bind=0.0.0.0:8080", "--timeout", "600", "webApp:create_app()" ]
-        return subprocess.Popen(gunicorn_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        gunicorn_args = "gunicorn --bind=0.0.0.0:8080 --timeout 600 'webApp:create_app()'"
+        return subprocess.Popen(gunicorn_args, shell=True)
     """
     def gunicorn(self):
         gunicorn_args = ["venv/bin/gunicorn", "--bind=0.0.0.0:8080", "--timeout", "600", "--access-logfile", "/var/log/paperPi.log","webApp:create_app()" ]
@@ -189,6 +192,7 @@ class PaperPiService():
         self.webService = self.gunicorn()
         
         if self.webService:
+            print(f"webService: {self.webService}")
             logger.info('PaperPi Web service started')
         else:
             logger.info('PaperPi Web service failed')
@@ -199,6 +203,7 @@ class PaperPiService():
         self.setup()
         self.startWebApp()
         self.configWatchdog()
+        self.displayPic(True)
 
     def stop(self):
         # Your cleanup logic goes here
