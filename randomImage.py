@@ -110,6 +110,7 @@ def createRandomImage(**kwargs):
         art.myRandom = art.MyRandom(seed, art.numColors)
         art.genImage(art.shape)
         art.image.save(filePath)
+        return filePath
         #print(f"\nCreated: {fileNamme}\n")
 
 def main(argv):

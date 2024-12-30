@@ -114,7 +114,7 @@ class PaperPiService():
             newImage = sc.prepImage(newImage)
             logger.info("Choosing image to display")
             sc.displayImage(newImage)
-            sc.sleep() 
+            sc.sleep()  
         
     def create_random_image(self):
         fileName = datetime.now().strftime("%m.%d.%Y-%H.%M.%S")+".bmp"

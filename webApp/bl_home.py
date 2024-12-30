@@ -6,7 +6,7 @@ from .auth import *
 from datetime import datetime
 from logging_config import logger
 import json, os
-import randomImage, screen_handler
+import service, screen_handler
 
 CONFIG_FILE = os.path.join(os.getcwd(),'webApp/config/config.json')
 CONFIG_FILE = os.getenv("PAPERPICONFIG", CONFIG_FILE)
@@ -34,13 +34,9 @@ def write_config(newConfig):
         json.dump(data, file)
 
 def create_random_image():
-    fileName = datetime.now().strftime("%m.%d.%Y-%H.%M.%S")+".bmp"
-    args = {"fileName": fileName, "directory": PICS_DIR}
-    randomImage.createRandomImage(**args)
-    origFile = os.path.join(PICS_DIR,fileName)
-    copyFile = os.path.join(PICS_DIR,'current.bmp')
-    os.system(f'cp {origFile} {copyFile}')
-    logger.info(f"Created: {fileName} and copied as current.bmp")
+    pps = service.PaperPiService()
+    pps.create_random_image()
+    pps.displayPic(True)
 
 bp = Blueprint('bl_home', __name__)
 
@@ -66,7 +62,6 @@ def config():
 @manage_cookie_policy
 def new_random():
     create_random_image()
-    print("Flashing")
     flash("newImageMsg")
     return redirect('/')
 
