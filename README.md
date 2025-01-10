@@ -69,10 +69,62 @@ ____
           │   ├── pics (directory containing photos that can be displayed)
           │   │   └── current.bmp - Current Photo being displayed 
 ```
+## Configuration File
+The configuration file for PhotoPi is named _**config.json**_ and is located under the _webApp/config_ directory.
+In general the config allows you to choose to display an image Daily, Weekly, or in a user defined number of hours using either a randomly generated image or a random uploaded photo. Additionally, to immprove the life of the screen it can be refreshed on a Daily, Weekly or user defined nummber of hours. The schema below outlines the expected format. Note that the _lowPower_ and _offline_ fields are currently not immplemented.
 
-    
+```
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Schema for PaperPi",
+  "type": "object",
+  "properties": {
+    "source": {
+      "enum": ["Generate Random Image", "Use Uploaded Pictures"]
+    },
+    "changeFreq": {
+      "enum": ["Daily", "Weekly", <USER_SUPPLIED_NUMBER>]
+    },
+    "screenRefreshFreq": {
+      "enum": ["Daily", "Weekly", <USER_SUPPLIED_NUMBER>]
+    },
+    "lowPower": {
+      "type": "boolean"
+    },
+    "offline": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "source",
+    "changeFreq",
+    "screenRefreshFreq",
+    "lowPower",
+    "offline"
+  ]
+}
+```
 
+## PhotoPi Web Application
 
+### Home Page
+Shows the current configuration the PhotoPi is running under. Provides a link to the configuration tab and a button to generate a random new picture and name it _current.bmp_
 
+![PhotoPi-Homepage](https://github.com/user-attachments/assets/67a2e7df-4d85-49d3-b9e7-db08423da9af)
 
+### Configuration Page
+The configuration page allows the user to choose the source of the next photo (random generated art or random photo in pics directory), when they want the display to change photos, and how often to refresh the screen.
+Currently the Low Power option is non-functional
 
+![PhotoPi-ConfigurationPage](https://github.com/user-attachments/assets/d14e7c67-5e61-4ece-ab96-59fe27b0e85e)
+
+### Upload and Download Page
+This page provides an overview of the **_pics_** directory. The photos are listed and can be deleted or downloaded as Zip. Additionally, the user can upload new photos to be displayed.
+To upload photos click **Choose Files** aand select valid photos or a 7z or Zip archive of photos, and then click **Upload Files**
+
+![PhotoPi-UploadDownloadPage](https://github.com/user-attachments/assets/f1d2c7b7-d5f4-4aae-bf55-99f3c9405c40)
+
+### Log Page
+This page allows the user to click _**Display Logs**_ to view the PhotoPi's logfile. The _**Clear Log**_ button will erase the logfile
+
+![PhotoPi-LogPage](https://github.com/user-attachments/assets/c3ee3952-f1de-4975-9c8a-68505939c554)
