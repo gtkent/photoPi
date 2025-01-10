@@ -33,6 +33,8 @@ To begin with it is assumed a Raspberry Pi OS Lite image is installed and config
 ____
 ## Major Components
 ```
+├── .env:
+      Environment file that sets up neccesary environment variables. SESSION_SECRET should be set as a unique key 
 ├── install.sh:
       Installation script that install needed dependencies and libraries
 
