@@ -38,7 +38,7 @@ ____
 
 ├── logging_config.py -
 
-├── main.py - 
+├── main.py - Test Main to run local flask webserver for testing
 
 ├── paperPi.service:
       systemd style service file to be placed in _/etc/systemd/system/_ to run this project as a service 
